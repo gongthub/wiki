@@ -150,6 +150,13 @@ Spring 3.2控制器通知,带有@ControllerAdvice注解的类，这个类会包�
 - 通过flash属性发送数据
 
 ### 使用Spring Web Flow
+_Spring Web Flow 建立于Spring MVC之上_
+
+Spring Web Flow 主要三元素
+- 状态
+- 转移
+- 流程数据
+
 
 ### 保护Web应用
 
