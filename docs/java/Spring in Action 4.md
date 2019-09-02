@@ -159,18 +159,81 @@ Spring Web Flow 主要三元素
 
 
 ### 保护Web应用
+Spring Security是基于Spring的应用程序提供声明式安全保护的安全性框架。Spring Security提供了完整的安全性解决方案，它能够在Web请求级别和方法调用级别处理身份认证和授权。因为基于Spring框架，所以Spring Security充分利用了依赖注入和面向切面的技术。
+
+Spring Security 3.2分为11个模块,应用程序的类路径下至少要包含Core和Configuration这两个模块
+![Spring Security 3.2分为11个模块](https://i.loli.net/2019/09/02/vEdo3mhILkHPOx5.png)
+
+- 过滤Web请求
+- 编写简单的安全性配置
+- 拦截请求
+- 使用Spring表达式进行安全保护、
+- 强制通道的安全性
+- 防止跨站请求伪造
+- 认证用户
+- 保护视图
 
 ## 后端中的Spring
 
 ### 通过Spring和JDBC征服数据库
+_Spring自带了一组数据访问框架，集成了多种数据访问技术_
+JDBC种可能导致抛出SQLException的常见问题包括:
+- 应用程序无法连接数据库
+- 要执行的查询存在语法错误
+- 查询中所使用的表和/或列不存在
+- 试图插入或更新的数据违反了数据库约束
+一方面，JDBC的异常体系过于简单了——实际上，他算不上一种体系。另一方面，Hibernate的异常体系是其本身所独有的(二十个左右的异常)。我们需要数据访问异常要具有描述性而且又与特定的持久化框架无关。
+
+Spring JDBC提供的数据访问异常体系解决了以上两个问题。
+
+Spring将数据访问过程中固定的和可变的部分明确划分为两个不同的类:模板(template)和回调(callback)。模板管理过程中固定的部分，而回调处理自定义的数据访问代码。
+![Spring的数据访问模块类负责通用的数据访问功能](https://i.loli.net/2019/09/02/FhDSXVmYIx5Rd7P.png)
+
+配置数据源
+- 通过JDBC驱动程序定义的数据源
+- 通过JNDI查找数据源
+- 连接池的数据源
+- 使用嵌入式的数据源
+- 使用profile选择数据源
 
 ### 使用对象关系映射持久化数据
+相对JDBC更复杂的特性:
+- 延迟加载(Lazy loading)
+- 预先抓取(Eager fetching)
+- 级联(Cascading)
+Spring对ORM框架的支持提供了与这些框架的集成点以及一些附加的服务:
+- 支持集成Spring声明式事务
+- 透明的异常处理
+- 线程安全的、轻量级的模板类
+- DAO支持类
+- 资源管理
+
 
 ### 使用NoSQL数据库
+- 使用MongoDB持久化文档数据
+    - 通过注解实现对象-文档映射
+    - 使用MongoTemplate实现基于模板的数据库访问
+    - 自动化的运行时Repository生成功能
 
+- 使用Neo4j操作图数据
+- 使用Redis操作key-value数据
 ### 缓存数据
+_Spring自身并没有实现缓存解决方案，但是它对缓存功能提供了声明式的支持，能够与多种流行的缓存实现进行集成_
+
+Spring对缓存的支持有两种方式:
+- 注解驱动的缓存
+- XML声明的缓存
 
 ### 保护方法应用
+方法级别的安全性是Spring Security Web级别安全性的一个重要补充。
+
+Spring Security提供了三种不同的安全注解:
+- Spring Security自带的@Secured注解
+- JSR-250的@RolesAllowed注解
+- 表达式驱动的注解，包括@PreAuthorize、@PostAuthorize、@PreFilter和@PostFilter
+    - 表述方法访问规则
+    - 过滤方法的输入和输出
+
 
 ## Spring集成
 
