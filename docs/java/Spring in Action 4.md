@@ -238,15 +238,85 @@ Spring Security提供了三种不同的安全注解:
 ## Spring集成
 
 ### 使用远程服务
+可以使用的远程调用技术
+- 远程方法调用(Remote Method Invocation,RMI)
+    - 基于Java，服务端和客户端必须都是Java开发的
+    - RMI使用了Java的序列化机制，通过网络传输的对象类型必须要保证在调用两端的Java运行时中是完全相同的版本
+    - RMI很难穿越防火墙
+- Caucho的Hessian和Burlap
+    - Hessian使用二进制消息进行客户端和服务端的交互
+    - Hessian二进制消息可以移植到其他非Java的语言中
+    - Burlap是基于XML的远程调用技术
+    - Hessian和Burlap可以很好的穿透防火墙
+- Spring基于HTTP的远程服务
+    -HTTP Invoker使用Java标准的对象序列化机制
+    - 基于HTTP的远程调用
+    - HTTP Invoker客户端和服务端必须要都是Spring应用
+
+- 使用JAX-RPC和JAX-WS的Web Service
 
 ### 使用Spring MVC创建REST API
+_Spring对REST的支持是构建在Spring MVC之上的_
+
+REST与RPC几乎没有任何关系，RPC是面向服务的，并关注于行为和动作，而REST是面向资源的，强调描述应用程序的事物名词
+- 表述性(Representational):REST资源实际上可以用各种形式来进行表述，包括XML、JSON、甚至HTML——最适合资源使用者的任意形式
+- 状态(State):当使用REST的时候，我们更关注资源的状态而不是对资源采取的行为
+- 转移(Transfer):REST涉及到转移资源数据，它以某种表述性形式从一个应用转移到另一个应用
+
+Spring支持以下方式来创建REST资源:
+- 控制器可以处理所有的HTTP方法，包含四个主要的REST方法，GET、PUT、DELETE以及POST。Spring 3.2以上版本还支持PATCH方法
+- 借助@PathVariable注解，控制器能够处理参数化的URL
+- 借助Spring的视图和视图解析器，资源能够以多种方式进行标鼠，包括将模型数据渲染为XML、JSON、Atom以及RSS的View实现
+- 可以使用ContentNegotiatingViewResolver来选择最合适客户端的表述
+- 借助@ResponseBody注解和各种HttpMethodConverter实现，能够替换基于视图的渲染方式
+- 类似地，@ResquestBody注解以及HttpMethodConverter实现可以将传入的HTTP数据转化为传入控制器处理方法的Java对象
+- 借助RestTemplate，Spring应用能够方便的使用REST资源
 
 ### Spring消息
+采用同步通信机制访问远程服务的客户端存在几个限制，主要如下:
+- 同步通信意味着等待，当客户端调用远程服务方法时，它必须等待远程方法结束后才能继续执行。如果客户端与远程服务频繁通信，或者远程服务响应很慢，就会对客户端应用的性能带来负面影响
+- 客户端通过服务端接口与远程服务相耦合，如果服务的接口发生变化，此服务的所有客户端都需要做相应的改变
+- 客户端与远程服务的位置耦合。客户端必须配置网络位置，这样它才知道如何与远程服务进行交互。如果网络拓扑进行调整，客户端也需要重新配置新的网络位置
+- 客户端与服务的可用性相耦合，如果远程服务不可用，客户端实际也无法正常运行
+
+异步通信如果解决这些问题
+- 无需等待
+- 面向消息和解耦
+- 位置独立
+- 确保投递
+
+四种标准的AMQP Exchange：
+- Direct:如果消息的routing key与binding的routing key直接匹配的话，消息将会路由到该队列上
+- Topic:如果消息的routing key与binding的routing key符合通配符匹配的话，消息将会路由到该队列上
+- Headers:如果消息参数表中的头信息和值都与binding参数表中相匹配，消息将会路由到该队列上
+- Fanout:不管消息的routing key和参数表的头信息/值时什么，消息将会路由到所有队列上
 
 ### 使用WebSocket和STOMP实现消息功能
+WebSocket协议提供了通过一个套接字实现全双工通信的功能
+Spring 4.0为WebSocket通信提供了支持，包括:
+- 发送和接受消息的底层级API
+- 发送和接受消息的高级API
+- 用来发送消息的模板
+- 支持SockJS,用来解决浏览器端、服务器以及代理不支持WebSocket的问题
+
+SockJS会优先选用WebSocket,但是如果WebSocket不可用的话，它将会从如下的方案中挑选最优的可行方案:
+- XHR流
+- XDR流
+- iFrame事件源
+- iFrame HTML文件
+- XHR轮询
+- XDR轮询
+- iFrame XHR轮询
+- JSONP轮询
 
 ### 使用Spring发送Email
 
 ### 使用JMX管理Spring Bean
+Spring对DI的支持是通过在应用中配置bean属性，这是一种非常不错的方法。不过，一旦应用已经部署并且正在运行，单独使用DI并不能帮助我们改变应用的配置。假设我们希望深入了解正在运行的应用并要在运行时改变应用的配置，此时，就可以是使用Java管理扩展(Java Mangement Extensions，JMX)
+JMX规范定义了如下4种类型的MBean:
+- 标准MBean:标准MBean的管理接口时通过在固定的接口上执行反射确定的，bean类会实现这个接口
+- 动态MBean:动态MBean的管理接口是运行时通过调用DynamicMBean接口的方法来确定的，因为管理接口不是通过静态接口定义的，因此可以在运行时改变
+- 开发MBean:开放MBean是一种特殊的动态MBean，其属性和方法只限定于原始类型、原始类型的包装类以及可以分解为原始类型或原始类型包装类的任意类型
+- 模型MBean:模型MBean也是一种特殊的动态MBean，用于充当管理接口与受管资源的中介，模型Bean并不像它们所声明的那样来编写。它们通常通过工厂生成，工厂会使用元信息来组装管理接口
 
 ### 借助Spring Boot简化Spring 开发
