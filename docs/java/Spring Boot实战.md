@@ -122,14 +122,93 @@ _编写单元测试的时候，Spring通常不需要介入，Spring鼓励松耦�
 Spring Framework以JUnit类运行器的方式提供了集成测试支持，JUnit类运行器会加载Spring应用程序上下文，把上下文里的Bena注入测试。Spring Boot在Spring的集成测试之上又增加了配置加载器，以Spring Boot的方式加载应用程序上下文，包括了对外属性的支持和Spring Boot日志。Spring Boot还支持容器内测试Web应用程序，让你能用和生产环境一样的容器启动应用程序。这样一来，测试在验证应用程序行为的时候，会更加接近真实的运行环境。
 
 ## Groovy与Spring Boot CLI
+_Spring Boot CLI是一个命令行工具，将强大的Spring Boot和Groovy结合在一起，针对Spring应用程序形成了一套简单而又强大的开发工具。_
+
+- Spring Boot CLI项目没有严格的项目结构要求
+- 通过Groovy消除代码噪声
+- CLI可以利用Spring Boot的自动配置和起步依赖
+- CLI可以检测到正在使用的特定类，自动解析适合的依赖库来支持那些类
+- CLI知道多数常用类都在哪些包里，如果用到了这些类，它会把那些包加入Groovy的默认包里
+- 应用自动依赖解析和自动配置后，CLI可以检测到当前运行的是一个Web应用程序，并自动引入嵌入式Web容器(默认是Tomcat)供应用程序使用
+
+对于CLI无法自动解析的库，基于CLI的应用程序可以利用Grape的@Grab注解，不用构建说明也能显式的声明依赖
 
 ## 在Spring Boot中使用Grails
+- Grails和Spring Boot都旨在让开发者的生活更简单、大大简化基于Spring的开发模型，因此两者看起来是相互竞争的框架。
+- GORM和GSP视图，两个都是知名的Grails特性，，GORM是Spring Boot里一个受欢迎的特性，能让你直接针对领域模型执行持久化操作，消除了对模型仓库的需求。
+- Grails3是Grails构建于Spring Boot之上的最新版本。
 
 ## 深入Actuator
+Spring Boot Actuator提供了很多生产级的特性，比如监控和度量Spring Boot应用程序。Actuator的这些特性可以通过众多的REST端点、远程shell和JMX获得。
+Actuator
+
+*揭秘Actuator的端点*  
+Spring Boot Actuator关键特性是在应用程序里提供众多Web端点，通过他们了解应用程序运行时的内部状况
+![Actuator的端点](https://i.loli.net/2019/09/08/itucJ8qkD9NQE7m.png)
+- 查看配置明细
+    - 获取Bean装配报告
+    - 详解自动配置
+    - 查看配置属性
+    - 生成端点到控制器的映射
+- 运行时度量
+    - 查看应用程序的度量值
+    - 追踪Web请求
+    - 导出线程活动
+    - 监控应用程序健康情况
+- 关闭应用程序
+- 获取应用信息
+
+*连接Actuator的远程shell*  
+Spring Boot集成了CRaSH，一种能嵌入任意Java应用程序的shell。Spring Boot还扩展了CRaSH，添加了不少Spring Boot特有的命令，提供了与Actuator端点类似的功能。
+- 查看autoconfig报告
+- 列出应用程序的Bean
+- 查看应用程序的度量信息
+- 调用Actuator端点
+
+*通过JMX监控应用程序*  
+除了REST端点和远程shell，Actuator还把它的端点以MBean的方式发布了出来，可以通过JMX来查看和管理。
+Actuator的端点都发布在org.springframework.boot域下
+
+*定制Actuator*
+- 重命名端点
+- 启用和禁用端点
+- 自定义度量信息
+- 创建自定义仓库来存储跟踪信息
+- 插入自定义的健康指示器
+
+*保护Actuator端点*  
+很多Actuator端点发布的信息都可能设计敏感数据，还有一些端点(比如/shutdown)非常危险，可以用来关闭应用程序。因此，保护这些端点尤为重要，能访问他们只能是那些经过授权的客户端。
+Actuator的端点保护可以用和其他URL路径一样的方式，使用Spring Security。
 
 ## 部署Spring Boot应用程序
 
+*多种部署方式*  
+Spring Boot应用程序有多种构建和运行方式
+
+- 在IDE中运行应用程序(涉及Spring ToolSuite和IntelliJ IDEA)
+- 使用Maven的spring-boot:run或Gradle的bootrun,在命令行里运行
+- 使用Maven或Gradle生成可运行的JAR文件，随后在命令行中运行
+- 使用Spring Boot CLI在命令行中运行Groovy脚本
+- 使用Spring Boot CLI来生成可运行的JAR文件，随后在命令行中运行
+
+Spring Boot应用程序可以用多种方式打包  
+![Spring Boot部署选项](https://i.loli.net/2019/09/08/IAW2km6GTxMrq4l.png)
+
+*部署到应用服务器*  
+- 构建WAR文件
+- 创建生产Profile
+- 开启数据库迁移
+    - Flyway
+    - Liquibase
+
 ## Spring Boot开发者工具
+Spring Boot 1.3引入了一组新的开发者工具，可以让你在开发时更方便地使用Spring Boot，包括功能如下:
+
+- 自动重启:当Classpath里的文件发生变化时，自动重启运行中的应用程序
+- LiveReload支持:对资源的修改自动触发浏览器刷新
+- 远程开发:远程部署时支持自动重启和LiveReload
+- 默认的开发时属性值:为一些属性提供有意义的默认开发时属性值
+- 全局配置开发者工具
 
 ## Spring Boot起步依赖
 
