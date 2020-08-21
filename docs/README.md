@@ -3,6 +3,11 @@
 ### Base
 #### Collection
 - [Java集合框架](/Learning/java/base/collection/Java集合框架)
+    - [HashSet](/Learning/java/base/collection/HashSet)
+    - [HashMap](/Learning/java/base/collection/HashMap)
+
+#### 关键字
+- [transient](/Learning/java/base/transient)
 
 ### Spring
 - [Spring 实战 4](/Learning/java/Spring/Spring%20实战%204)
