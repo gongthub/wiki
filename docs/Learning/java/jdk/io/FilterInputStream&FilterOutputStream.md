@@ -5,6 +5,10 @@
 
 ## FilterInputStream
 ```
-// 
 protected volatile InputStream in; 
+```
+
+## FilterOutputStream
+```
+protected OutputStream out;
 ```
