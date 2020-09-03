@@ -65,4 +65,5 @@
 
 ### 总结
     各个IO模型的比较图如下：
-    
+![各IO模型比较图](https://raw.githubusercontent.com/gongthub/wiki/master/docs/Resources/%E5%90%84IO%E6%A8%A1%E5%9E%8B%E6%AF%94%E8%BE%83%E5%9B%BE.png)
+    通过上面的图片，可以发现non-blocking IO和asynchronous IO的区别还是很明显的。在non-blocking IO中，虽然进程大部分时间都不会被block，但是它仍然要求进程去主动check，并且当数据准备完成以后，也需要进程主动的再次调用recvfrom来将数据拷贝到用户内存。而asynchronous IO则完全不同。它就像是用户进程将整个IO操作交给了他人（kernel）完成，然后他人做完后发信号通知。在此期间，用户进程不需要去检查IO操作的状态，也不需要主动的去拷贝数据。
