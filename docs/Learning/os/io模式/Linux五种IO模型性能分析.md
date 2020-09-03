@@ -62,3 +62,7 @@
     Linux提供了AIO库函数实现异步，但是用的很少。目前很多开源的异步IO库，例如libevent、libev、libuv。异步过程如下图所示：
 
 ![异步I/O模型图](https://raw.githubusercontent.com/gongthub/wiki/master/docs/Resources/%E5%BC%82%E6%AD%A5IO%E6%A8%A1%E5%9E%8B%E5%9B%BE.png)
+
+### 总结
+    各个IO模型的比较图如下：
+    
