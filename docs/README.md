@@ -30,7 +30,7 @@
     - [PrintWriter](Learning/java/jdk/io/PrintWriter)
 
 #### thread
-- [Java线程详解](Learning/java/base/thread/Java 线程详解)
+- [Java线程详解](Learning/java/base/thread/Java线程详解)
 
 
 #### 关键字
